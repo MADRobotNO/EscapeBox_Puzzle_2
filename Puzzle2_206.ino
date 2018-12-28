@@ -17,6 +17,7 @@
 //ver 1.7, Game over sound
 //ver 1.8, 2-ways communication
 //ver 1.9, Final
+//ver 2.0, SD Card logger added
 
 #include <Wire.h>
 #include <Wiegand.h>
@@ -172,12 +173,27 @@ void loop() {
   //check Counters
   if (tagID.equals(readTag)){
 	Serial.println("Check tag registered, showing counters on LCD");
+	lcd.clearDisplay();
+	delay(400);
+
     showCounters(counter1);
     delay(3000);
+
+lcd.clearDisplay();
+	delay(400);
+
     showCounters(counter2);
     delay(3000);
+
+	lcd.clearDisplay();
+	delay(400);
+
     showCounters(counter3);
     delay(3000);
+
+	lcd.clearDisplay();
+	delay(200);
+
 	tagID="";
   }
 
@@ -198,7 +214,7 @@ void loop() {
     Serial.println(tagID);
     Serial.println("Game Starts");
     counter1++;
-    toLogg += counter1 + counter2 + counter3;
+    toLogg += String(counter1) + "," + String(counter2) + "," +  String(counter3);
     logg(toLogg); 
     Serial.print("Game Starts counter is now: ");Serial.println(counter1);
     
@@ -289,8 +305,9 @@ void timer(){
   }
   
   if (minCounter <0){                       // GAME OVER
+	//Serial.println("Time is out. Game over!");
     counter3++;
-    toLogg += counter1 + counter2 + counter3;
+    toLogg += String(counter1) + "," + String(counter2) + "," +  String(counter3);
     logg(toLogg); 
     minCounter=0;
     secCounter=0;    
@@ -414,7 +431,7 @@ void recData(int howManyBytes){
 
     if (c== 'W'){
       counter2++;
-      toLogg += counter1 + counter2 + counter3;
+      toLogg += String(counter1) + "," + String(counter2) + "," +  String(counter3);
       logg(toLogg); 
       while(true){
         //infinite loop  
